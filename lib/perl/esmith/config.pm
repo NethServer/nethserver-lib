@@ -462,6 +462,14 @@ sub STORE
         warn "ERROR: You should not set a config record without a type (key was $key).\n";
     }
 
+    if ($self->{FILENAME} eq '/var/lib/nethserver/db/configuration') {
+        if($key eq 'SystemName'
+        || $key eq 'DomainName'
+        || $key eq 'TimeZone') {
+            warn("[WARNING] configuration DB: $key is deprecated on ns7 and read-only!\n");
+        }
+    }
+
     # read in config again, just in case it changed
     $self->_lock_write;
     $self->{CONFIG} = $self->_readconf($self->{FILENAME});
