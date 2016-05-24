@@ -24,13 +24,12 @@ use vars qw($VERSION);
 $VERSION = 1.45;
 
 use Sys::Hostname;
-use Net::DBus;
+use NethServer::TimeZone;
 use Sys::Syslog qw(:DEFAULT);
 use Fcntl qw(:DEFAULT :flock);
 use Carp qw(cluck);
 
 my $Default_Config = '/var/lib/nethserver/db/configuration';
-my $bus = Net::DBus->system();
 
 =pod
 
@@ -227,9 +226,7 @@ sub _readconf
         my ($systemName, $domainName) = split(/\./, Sys::Hostname::hostname(), 2);
         $config{'SystemName'} = $systemName || '';
         $config{'DomainName'} = $domainName || '';
-        my $service = $bus->get_service("org.freedesktop.timedate1");
-        my $object = $service->get_object('/org/freedesktop/timedate1');
-        $config{'TimeZone'} = $object->Timezone;
+        tie $config{'TimeZone'}, 'NethServer::TimeZone', '';
     }
 
     return \%config;
