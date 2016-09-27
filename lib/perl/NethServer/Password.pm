@@ -29,6 +29,23 @@ use strict;
 
 NethServer::Password module
 
+    The Module is used to create and store a password to /var/lib/nethserver/secrets
+    
+=head1 SYNOPSIS
+
+To create, store and retrieve a password do :
+
+    use NethServer::Password;
+    my $pw = NethServer::Password::store('mysql');
+
+by default the length is 16 characters
+
+If you need a more stronger password (128 characters by example), you can call it directly
+
+    my $pw = NethServer::Password->new('mysql',{'length' => 128})->save()->getAscii()
+
+It will be created, stored and retrieved when needed
+
 =cut
 
 
