@@ -130,6 +130,7 @@ my @goodIPs = qw(1.2.3.4
 sub isValidIP($)
 {
     my ($string) = @_;
+    return unless defined ipv4_chkip($string);
     return $string eq ipv4_chkip($string);
 }
 
