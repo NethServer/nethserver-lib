@@ -444,7 +444,7 @@ sub processTemplate {
         if ($p{'DELETE'})
         {
             unlink "$outputfile";
-            return;
+            return 1;
         }
 
         # use POSIX::open to set permissions on create
