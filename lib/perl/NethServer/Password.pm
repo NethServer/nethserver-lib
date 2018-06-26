@@ -63,7 +63,7 @@ sub new
 	'defaultDir' => '/var/lib/nethserver/secrets',
 	'dirty' => 1,
 	'secret' => undef,
-	'symbols' => ['A'..'Z', 'a'..'z', '0'..'9', '_'],
+	'symbols' => [['A'..'Z'], ['a'..'z'], ['0'..'9'], ['_']],
 	'length' => 16,
 	'autoSave' => $fileName ? 1 : 0,
     };
@@ -106,8 +106,31 @@ sub getAscii
 sub generate
 {
     my $self = shift;
-    my @sym = @{$self->{'symbols'}};
-    $self->{'secret'} = join('', map $sym[rand(@sym)], 1..$self->{'length'});
+    my @symbols = (); # flat alphabet set
+
+    my $length = $self->{'length'};
+    my @secret = ();
+    my @keyset = 0..($length - 1);
+
+    # Flattenize the alphabet and extract a symbol from each sublist
+    foreach (@{$self->{'symbols'}}) {
+        if(ref $_ eq 'ARRAY') {
+            my @psym = @{$_};
+            my $index = $keyset[rand(@keyset)]; # get a random index
+            @keyset = grep { $_ != $index } @keyset; # pop the extracted index from the set
+            $secret[$index] = $psym[rand(@psym)]; # initialize the index with a random sublist element
+            push @symbols, @psym; # flattenize the sublist
+        } else {
+            push @symbols, $_;
+        }
+    }
+
+    foreach (@keyset) {
+        $secret[$_] = $symbols[rand(@symbols)]; # fill the remaining indexes
+    }
+
+    $self->{'secret'} = join('', @secret);
+
     $self->{'dirty'} = 1;
     return $self;
 }
