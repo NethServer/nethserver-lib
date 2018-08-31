@@ -404,6 +404,8 @@ call, which is what this is going to do. :)
 
 This method returns a list of keys to the records in the db. It does not sort.
 
+=back
+
 =cut
 
 sub keys
@@ -694,7 +696,7 @@ sub error
     return $Error;
 }
 
-=back
+=pod
 
 =head1 AUTHOR
 
