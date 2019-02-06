@@ -24,7 +24,6 @@ use vars qw($VERSION);
 $VERSION = 1.45;
 
 use Sys::Hostname;
-use NethServer::TimeZone;
 use Sys::Syslog qw(:DEFAULT);
 use Fcntl qw(:DEFAULT :flock);
 use Carp qw(cluck);
