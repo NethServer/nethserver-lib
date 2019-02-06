@@ -229,6 +229,8 @@ sub _readconf
             my $timeZone = readlink('/etc/localtime');
             $timeZone =~ s|^(\.\.)?/usr/share/zoneinfo/||;
             $config{'TimeZone'} = $timeZone;
+        } else {
+            $config{'TimeZone'} = 'UTC';
         }
     }
 
