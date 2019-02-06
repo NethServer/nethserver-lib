@@ -226,7 +226,11 @@ sub _readconf
         my ($systemName, $domainName) = split(/\./, Sys::Hostname::hostname(), 2);
         $config{'SystemName'} = $systemName || '';
         $config{'DomainName'} = $domainName || '';
-        tie $config{'TimeZone'}, 'NethServer::TimeZone', '';
+        if ( -l '/etc/localtime' ) {
+            my $timeZone = readlink('/etc/localtime');
+            $timeZone =~ s|^(\.\.)?/usr/share/zoneinfo/||;
+            $config{'TimeZone'} = $timeZone;
+        }
     }
 
     return \%config;
