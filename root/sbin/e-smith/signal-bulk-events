@@ -1,0 +1,36 @@
+#!/usr/bin/perl -w
+
+#----------------------------------------------------------------------
+# Copyright 1999-2003 Mitel Networks Corporation
+# This program is free software; you can redistribute it and/or
+# modify it under the same terms as Perl itself.
+#----------------------------------------------------------------------
+
+use strict;
+use Getopt::Long;
+use esmith::bulkevent;
+use Env qw(LANG LANGUAGE);
+
+my $json = 0;
+GetOptions ("json" => \$json);
+
+my $usage = "usage:
+    $0 eventname [--json] [arg1 [arg2...]]
+";
+
+die $usage unless @ARGV;
+
+#
+# Reset locale settings - see man setlocale(3) - Refs #973
+#
+$LANG='en_US.utf8';
+delete $ENV{LANGUAGE};
+delete $ENV{$_} foreach grep(m/^LC_.+/, keys %ENV);
+
+set_json_log($json);
+my $exitcode = event_bulk(@ARGV);
+
+
+# reverse exitcode for command-line usage
+exit ($exitcode ? 0 : 1);
+
