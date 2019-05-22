@@ -7,17 +7,19 @@
 #----------------------------------------------------------------------
 
 use strict;
-use Getopt::Long;
 use esmith::event;
 use Env qw(LANG LANGUAGE);
 
 my $json = 0;
-GetOptions ("json" => \$json);
 
 my $usage = "usage:
-    $0 eventname [--json] [arg1 [arg2...]]
+    $0 [-j|--json] <eventname> [arg1 [arg2...]]
 ";
 
+if(defined $ARGV[0] && ($ARGV[0] eq '-j' || $ARGV[0] eq '--json')) {
+    $json = 1;
+    shift @ARGV;
+}
 my ($event, @args) = @ARGV;
 die $usage unless $event;
 
